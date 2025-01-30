@@ -1,0 +1,54 @@
+-----------------------------------------------------------
+30 - thursday
+-----------------------------------------------------------
+--- Micro Controllers ---
+-- ESP32 -- [https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf]
+~$10
+esp32-wroom-32 has 2.4 GHz wifi, bluetooth / ble, and dual
+cores. about a megabyte of ram, and 32 pins.
+18 ADC channels
+3 SPI pins
+3 UART pins
+16 PWM outputs
+2 DAC channels
+2 i2S pins
+10 GPIOs
+-- ESP32-PICO-DevKitM-2 --
+~$12.00
+has more memory then plain esp32 which makes it possible to
+do both bluetooth and wifi at the same time according to
+a review on amazon, although it may be possible on esp32.
++8 MB of flash + 2 MB PSRAM is great for $2
+
+--- Software of the ESP32 --- [https://docs.espressif.com/projects/esp-idf/en/stable/esp32/index.html]
+espressif produces the esp32 and has documentation on how to
+program it. the boards use FreeRTOS as their operating system.
+they provide an ESP-IDF and have a repo for their tooling on
+compiling / flashing programs to their boards. https://github.com/espressif/esp-idf
+pretty well documented and easy to set up on M1 macpro.
+easy to use with vscode or zed, much better option than arduino.
+the library is basically a esp specific version of freeRTOS.
+
+-- FreeRTOS -- [https://www.freertos.org/Documentation/01-FreeRTOS-quick-start/01-Beginners-guide/01-RTOS-fundamentals]
+rtos (real time operating systems) are small and suitable for
+constrained hardware. free RTOS supports multitasking. On a
+single core many tasks can be run and are managed by the kernels
+fixed-priority, preemptive scheluling policy with round robin
+for equal priority tasks. ESP32s have 2 cores, so we can attach
+tasks to cores and have them be run simultaneously and part of
+their own respective scheduling. there is a heap and for memory
+management malloc and free will work but more specific
+calls will allow for better control over memory see pvPortMalloc()
+
+-Queues-
+allows messaging between tasks. FIFO, with ability to send to back
+or to the front. Data is copied into the queue, not a reference
+to the data. although the queue could be made to hold references.
+simple and flexible. the kernel is responsible for sizing these
+queues. Variable sized messages can be sent via a queue holding
+structs of a pointer to the data and size of data. same can be
+done with data of differing type.
+Reading from an empty queue will place the task in  a blocked state,
+until available or block time expires.
+If two tasks are dependend on the queue, and in a blocked state,
+the first to be unblocked will be the higher priority.
