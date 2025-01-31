@@ -1,19 +1,17 @@
 -----------------------------------------------------------
 thursday - 30th
 -----------------------------------------------------------
+
 --- Micro Controllers ---
--- ESP32 -- [https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf]
+
+--ESP32-- [https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf]
 ~$10
 esp32-wroom-32 has 2.4 GHz wifi, bluetooth / ble, and dual
 cores. about a megabyte of ram, and 32 pins.
-18 ADC channels
-3 SPI pins
-3 UART pins
-16 PWM outputs
-2 DAC channels
-2 i2S pins
-10 GPIOs
--- ESP32-PICO-DevKitM-2 --
+18 ADC channels; 3 SPI pins; 3 UART pins; 16 PWM outputs
+2 DAC channels; 2 i2S pins; 10 GPIOs
+
+--ESP32-PICO-DevKitM-2--
 ~$12.00
 has more memory then plain esp32 which makes it possible to
 do both bluetooth and wifi at the same time according to
@@ -61,4 +59,35 @@ not available the task will enter the blocked state for a desired
 number of clock ticks. if more then one task is waiting for the same
 semaphore, the task with highest priority will be given the semaphore
 once it is available.
-using a semaphore to synchronise tasks is
+implementing synchronization between tasks or an interupt is easy with
+a semaphore. you have task (A) which only ever attempts to "take" while
+the interupt only ever "gives" the semaphore. this way, when (A) is
+done processing it winds back in a Block state and waits there for the
+semaphore to become available. xSemaphoreGiveISR()
+also RTOS Task Notifications cam be a lighter weight alternative
+(basically tasks have an array of notifications that can be waited on)
+
+-Counting Semaphore-
+basically just a number, that you can "give" to add; "take" to subtract
+good for resource management; counting events;
+
+-Mutexes-
+mutex (mutual exclusion)
+mutexes make sure only one task is accessing a shared resource at a time.
+similar to a semaphore, tasks attempting to access a mutex that is being
+used will be put in a blocked state. Importante NOTE: when a low priority
+task has ownership of the mutex and a higher priorit task atempts to
+take it, the lower priority task will have its priority temporarily raised
+to that of the high priority task. apparently this makes the high prio task
+have the shortest wait time. (this does not cure priority inversion, but
+minimizes it)
+keep in mind -> a task can have its priority raised more if it has multiple
+mutexes in ownership
+a task remains the highest priority while it owns the mutex.
+(recursive mutexes allow multiple takes, and require multiple gives)
+
+---Other Micro Controllor Options---
+Renesas RZ/N1D : 500 MHz + lots of peripherals + more memory + quad core potential
+SiFi: way to big but RISC-V
+Texas Instruments: some cool ones
+none of these are as easy to set up.
