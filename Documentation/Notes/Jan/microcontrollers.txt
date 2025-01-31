@@ -1,5 +1,5 @@
 -----------------------------------------------------------
-30 - thursday
+thursday - 30th
 -----------------------------------------------------------
 --- Micro Controllers ---
 -- ESP32 -- [https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf]
@@ -52,3 +52,13 @@ Reading from an empty queue will place the task in  a blocked state,
 until available or block time expires.
 If two tasks are dependend on the queue, and in a blocked state,
 the first to be unblocked will be the higher priority.
+
+-Binary Semaphore-
+kind of like a queue that can only hold one item.
+good for implementing sync between tasks.
+a task can attempt to "take" the semaphore. if the semaphore is
+not available the task will enter the blocked state for a desired
+number of clock ticks. if more then one task is waiting for the same
+semaphore, the task with highest priority will be given the semaphore
+once it is available.
+using a semaphore to synchronise tasks is
