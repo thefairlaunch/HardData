@@ -1,9 +1,5 @@
 -----------------------------------------------------------
-friday - 31st
+Schematics
 -----------------------------------------------------------
-mostly just taking notes on Espressif ESP-IDF programming
-guide.
-
---- ESP IDF ---
-
---API Conventions--
+any CAD files will be included in here along with assembly
+instructions.

@@ -1,0 +1,15 @@
+-----------------------------------------------------------
+Code
+-----------------------------------------------------------
+
+--Solute--
+this code is what the micro controller node will run. it
+contains logic for data gathering, data forwarding, owner
+interface, and systems maintenance.
+
+--Solvent--
+this code will be run on larger processors capable of
+aggregating communication pools, storing backup data,
+tethering of Solute meshes together. They are not
+necessary for a Solute mesh, but can enhance comms reach
+and data persistance.
