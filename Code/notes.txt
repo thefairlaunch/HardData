@@ -12,4 +12,5 @@ this code will be run on larger processors capable of
 aggregating communication pools, storing backup data,
 tethering of Solute meshes together. They are not
 necessary for a Solute mesh, but can enhance comms reach
-and data persistance.
+and data persistance. solvent nodes can help maintain
+the integrity of a mesh.

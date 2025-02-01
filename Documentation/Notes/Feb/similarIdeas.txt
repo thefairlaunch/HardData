@@ -1,0 +1,16 @@
+-----------------------------------------------------------
+Similar Ideas
+saturday - 1st
+-----------------------------------------------------------
+
+--Open Thread--
+google has its Nest meshes and decided to open source their
+network framework. this could be of great use.
+https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/openthread.html
+https://github.com/openthread/ot-esp32
+https://github.com/openthread/openthread
+
+
+--Golioth--
+this looks like a good management tool. something closer to solvent.
+https://golioth.io
