@@ -1,0 +1,10 @@
+-----------------------------------------------------------
+Documentation
+-----------------------------------------------------------
+documentation includes both resources relating to frameworks
+used in the project and notes on the projects progress.
+
+
+--Notes--
+organized into month that they were created. files descibe
+generally what the notes cover.
