@@ -1,0 +1,94 @@
+-----------------------------------------------------------
+friday - 31st
+-----------------------------------------------------------
+Notes on the ESP-IDF Framework / fork of FreeRTOS
+
+---Application Flow---
+1. ROM Bootloader
+the pro cpu will execute reset code, while app cpu is in reset.
+the reset code can not be modified. there are a few outcomes
+coming from a the reset code, depending on how reset occurs:
+
+-deep sleep-
+reset code will check the real time clock (rtc) registers
+"RTC_CNTRL_STORE6_REG" holds codes entry point address
+"RTC_CNTRL-STORE7_REG" holds a cyclic redundancy check (crc) value,
+like a checksum,to verify validity of the program data held
+in the RTC registers. if the CRC value is valid, the cpu will
+continue execution as usual from the address in store6 register,
+otherwise the cpu will restart as if from a power-reset.
+
+-power reset / soc reset-
+power and system-on-chip resets will check GPIO_STRAP_REG
+to see if a custom boot mode was requested, otherwise will
+proceed as if "software cpu" reset.
+
+-software cpu reset-
+configure SPI flash based on EFUSE values and attempt to
+load code from flash.
+
+
+2. Flash Bootloader
+second stage bootloader exists at 0x1000 in flash. the source
+code is available in the esp-idf github under esp-idf/components/bootloader
+this "second stage" bootloader is necessary for over the air (ota)
+updates, flash encryption, secure boot, and adds flexibility to flash layout
+using partition tables. if ota data is found in their partition,
+the bootloader will consult otadata to determine which should be used.
+once the partition is choses (factory, ota0, or ota1) the bootloader
+reads binary image from flash. any IRAM and DRAM contents are copied to
+their respective addresses at load. IRAM can significantly improve performance
+but is primarily for interupt handlers. the IRAM_ATTR will cause code to be placed
+in IRAM on load:
+void IRAM_ATTR my_func(void* args) { } will be loaded to IRAM
+consts large inside a IRAM func should be marked by DRAM_ATTR so as to not waste space
+such as a constant string:
+const static char *msg = DRAM_STR("STRING");
+after loading the code and integrity is verified, the application jumps to the start.
+
+-partition tables-
+by default this resides at 0x8000, length 0xC003 *  bytes
+allowing 95 entries. MD5 checksums are used to verify
+integrity of partition tables. they are appended at the
+end of the table data. each entry in the partition table
+consists of: (name | type | subtype | offset | size | flags)
+to use a partition table use "idf.py menuconfig". by default
+there are a few table: factory app, ota app0, ota app1, some
+data fields. the "name" has a maxmimum of 16bytes, it is not super
+significant. the "type" name or number 0-254 (0x00-0xFE) 0x00-0x3F
+are reserved for esp-idf core functions. app (0x00), data (0x01),
+bootloader (0x02), partition table (0x03).
+the "subtype" takes values to add more description to the type.
+if the type is app, "subtype" can specify what type of app.;
+if the type is bootloader, subtype specifies primary or ota;
+the "offset" must be a multiple of 0x1000 (4kb) since the flash
+sector size is 4kb. type app requires 64kb "size" alignments, if left
+blank the offset will automatically be set by gen_esp32part.py
+"flags" are either encrypted or readonly
+
+
+3. Application Startup
+-port initialization-
+seconds stage bootloader calls "call_start_cpu0", which never returns.
+soc internal harware is configured: cache, rtc watchdog timer, if multicores
+start other core (call_start_cpu1). set cpu clock frequencies (configured
+in project). once call_start_cpu0 completes, it calls system layer intialization
+found in esp idf github /components/esp_system/startup.c
+start_other_cores is also called.
+
+-system initialization-
+log info about application, initialize heap allocator, set up std in/out,
+burn efuses for security, initialize spi flash api. allow components
+marked with ESP_SYSTEM_INIT_FN to initialize.
+
+-main task app_main-
+the main task and FreeRTOS scheduler starts running. the app_main
+task has a fixed priority of 1 above idle (the minimum). it has a
+configurable stack size. unlike regular FreeRTOS, app_main can return
+and be cleaned, while allowing other tasks to continue to run.
+the PRO cpu sets the entry point for the APP cpu and de-asserts reset.
+once APP cpu indicates it has started, APP cpu jumps to call_start_cpu1
+while PRO cpu initialized, APP cpu runs start_cpu_other_cores which
+basically just has core specific initialization. it waits for pro cpu
+to initialize its FreeRTOS scheduler. once pro has its scheduler, the app
+will wait for pro to start the app FreeRTOS scheduler.
