@@ -18,6 +18,14 @@ do both bluetooth and wifi at the same time according to
 a review on amazon, although it may be possible on esp32.
 +8 MB of flash + 2 MB PSRAM is great for $2
 
+--ESP32-P4-Functino-EV-Board--
+$56 on aliexpress
+this might be useful for the Solvent boards, or even a beefy
+version of a Solute. 400Mhz RISC-V prossesor 32 MB PSRAM, vector
+multiplication. wifi 6 / ble .
+https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32p4/esp32-p4-function-ev-board/index.html
+
+
 --- Software of the ESP32 --- [https://docs.espressif.com/projects/esp-idf/en/stable/esp32/index.html]
 espressif produces the esp32 and has documentation on how to
 program it. the boards use FreeRTOS as their operating system.
