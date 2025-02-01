@@ -1,0 +1,9 @@
+-----------------------------------------------------------
+friday - 31st
+-----------------------------------------------------------
+mostly just taking notes on Espressif ESP-IDF programming
+guide.
+
+--- ESP IDF ---
+
+--API Conventions--
