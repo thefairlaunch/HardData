@@ -1,0 +1,68 @@
+-----------------------------------------------------------
+Error Handling with ESP IDF
+sunday - 2nd
+-----------------------------------------------------------
+
+---Error Handling---
+runtime errors can be classified as either "recoverable" or
+"unrecoverable" (fatal) errors.
+
+-Recoverable Errors-
+errors indicated by return values of functions, or c++
+exceptions produced by throw statements.
+
+-Unrecoverable Errors-
+failed assertions, abort calls, cpu exceptions, illegal
+memory access, system check fails, stack overflows ect..
+
+
+--Recoverable Errors--
+
+-Error Codes-
+the idf defines type esp_err_t to return error codes, it
+is simply a signed integer. there are many macro defined
+error codes, such as ESP_OK = 0, defined in esp_err.h .
+esp_err_to_name and esp_err_to_name_r will convert the
+integer to a string of the error code name for logging.
+posix errors can be interpreted as well using strerror_r
+defined in errorno.h, these values are stored in errno
+variable defined on each task.
+this functionality can be turned off to reduce binary
+size (CONFIG_ESP_ERROR_TO_NAME_LOOKUP) set to false
+will turn off the lookup table and simply make all
+error to string functions return "UNKOWN ERROR".
+
+-Error Checking Macros-
+ESP_ERROR_CHECK macro is basically an assert call,
+although instead of a boolean it takes esp_err_t.
+if the input is not ESP_OK (0) it will print the
+error, file, func, expression, backtrace, then abort.
+ESP_ERROR_CHECK_WITHOUT_ABORT will print error but
+contiue after.
+ESP_RETURN_ON_ERROR will print error and return
+the esp_err_t
+ESP_GOTO_ON_ERROR will print error, set a local var
+ret to the esp_err_t, then exits going to goto_tag
+helpful patters found here
+[https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/error-handling.html#error-handling-patterns]
+
+-- Unrecoverable Errors --
+fatal errors include cpu exceptions, load / store alignment
+problems. System checks fail such as interupt watchdog times
+out, cache accesss error, brownout detection, stackoverflow,
+stack smashing proteciton (writing to space outside the stack)
+after one of these fatal errors is detected, the Panic Handler
+is envoked.
+
+-Panic Handler Config-
+the panic handler prints the error then follows behavior based
+on the CONFIG_ESP_SYSTEM_PANIC
+CONFIG_ESP_SYSTEM_PANIC_PRINT_HALT - outputs relavent registers
+in serial and halts, needing manual reboot
+CONFIG_ESP_SYSTEM_PANIC_PRINT_REBOOT -  outputs relavent registers
+in serial and automatically resets the processor
+CONFIG_ESP_SYSTEM_PANIC_SILENT_REBOOT - just resets the processor
+CONFIG_ESP_SYSTEM_PANIC_GDBSTUB
+
+more configuration notes here:
+https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/fatal-errors.html
