@@ -1,0 +1,79 @@
+-----------------------------------------------------------
+Bluetooth on ESP32
+tuesday - 4th / wednesday - 5th
+-----------------------------------------------------------
+
+== Introduction to Bluetooth Low Energy ==
+bluetooth classic uses more power but allows for more data,
+longer ranges, and continuous streams. classic is used in
+audio and visual streaming, it demands more power, but is
+interesting.
+bluetooth low energy uses less energy, works at shorter
+ranges and transfers data slower. it can be used to send
+smaller data packets. it is used in proximity beacons using
+triangulation and signal strength.
+
+--ESP32 Capabilities--
+both classic and low energy are available on the esp32.
+they can be run by themselves or in dual mode. if we use
+only one of the modes, we can free memory of the other,
+for example with ble, we can release classic related mem.
+ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
+we can define advertising parameters, services, characteristics,
+event handlers, name of peripheral ect. multiple profiles can
+exist. only one device can connect to a given peripheral
+at a time.
+
+
+== Gatt Server ==
+
+--GATT--
+generic attribute profile defines a way for ble data
+transfer using Services and Characteristics. the protocol,
+Attribute Protocol (att) stores services and characteristics
+in a simple lookup table using 16bit ids. connections are exclusive.
+a peripheral can only be connected to a single central device
+at a time, earphones can only connect to a single phone)
+gatt uses nested objects to send data. Profiles hold Services, Services
+hold Characteristics.
+
+--Gatt Server--
+a peripheral such as airPods. This hold the ATT lookup table data,
+and defines services and characteristics. it responds to requests
+from the client.
+
+--Gatt Client--
+a central device such as an iPhone. this sends requests to the
+gatt server.
+
+--Application Profile--
+profiles are used to contain a service and have various descriptors
+
+--Services--
+uses predefined 16bit or 128bit uuuid; lots of these are available
+on bluetooth website. services encapsulate the data characteristics.
+
+--Characteristic--
+use 16bit or 128bit uuid. encapsulates a single data or an array
+of data.
+
+== GAP ==
+generic access profile, manages discovery, connection, and security
+of bluetooth connections.
+
+--GAP Parameters--
+we can define how others will see this bluetooth peripheral, such as
+name, appearance, available services, tx power, manufacturer, ect.
+one param worth noting is the min_interval and max_interval. this is
+an interger value, but each unit represents 1.25ms
+
+
+
+== interesting side reads ==
+https://en.wikipedia.org/wiki/Eddystone_(Google)
+https://google.github.io/physical-web/try-physical-web
+https://theconversation.com/how-silent-signals-from-your-phone-could-be-recording-and-tracking-you-94978
+https://www.tek.com/en/blog/quadrature-iq-signals-explained?bpv=2
+https://www.youtube.com/watch?v=nQ5e2Z3nYso
+https://www.digikey.com/en/articles/building-a-software-defined-radio
+https://www.youtube.com/watch?v=BG0rmMGpwMc
