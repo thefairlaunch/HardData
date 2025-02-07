@@ -1,0 +1,23 @@
+-----------------------------------------------------------
+Analog Inputs and Outputs on ESP32
+friday - 7th
+-----------------------------------------------------------
+there are two pins on the esp32 that support analog in / out
+GPIO 25 and GPIO 26
+
+=== Analog Output ===
+digital to analog output has a few modes:
+
+--One Shot--
+allows you do specify a value from 0-255 for the voltage of
+one of the channels. this means the voltage of the channel
+will be Vin / d where d is the value 0-255.
+this is done by first creating a dac_oneshot_handle_t
+and a dac_oneshot_config_t which specifies the chan_id.
+-DAC_CHAN_0-
+corresponds to gpio 25
+-DAC_CHAN_1-
+corresponds to gpio 26.
+you initialize the channel with dac_oneshot_new_channel
+with the handle and the corresponding config.
+dac_oneshot_output_voltage with the handle and voltage val.
