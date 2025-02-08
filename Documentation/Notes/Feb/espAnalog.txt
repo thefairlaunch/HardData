@@ -2,22 +2,35 @@
 Analog Inputs and Outputs on ESP32
 friday - 7th
 -----------------------------------------------------------
-there are two pins on the esp32 that support analog in / out
-GPIO 25 and GPIO 26
 
 === Analog Output ===
-digital to analog output has a few modes:
+there are two pins on the esp32 that support digital to
+analog conversion (DAC): GPIO 25 and GPIO 26. There are a few
+modes of outputting to these channels. Note that these notes
+are on the new version of DAC.
 
---One Shot--
-allows you do specify a value from 0-255 for the voltage of
-one of the channels. this means the voltage of the channel
-will be Vin / d where d is the value 0-255.
-this is done by first creating a dac_oneshot_handle_t
-and a dac_oneshot_config_t which specifies the chan_id.
--DAC_CHAN_0-
-corresponds to gpio 25
--DAC_CHAN_1-
-corresponds to gpio 26.
-you initialize the channel with dac_oneshot_new_channel
-with the handle and the corresponding config.
-dac_oneshot_output_voltage with the handle and voltage val.
+--Include Files--
+dac_oneshot.h shold be included when oneshots are used.
+dac_cosine.h should be used to output cosine.
+dac_conti.h should be used for continous output.
+
+--Oneshot Mode--
+this mode allows you to directly set the output voltage
+relative to the input voltage into your board. The value,
+sent using dac_oneshot_output_voltage(), takes a uint8
+value, allowing for 255 levels of voltage output.
+
+--Continuous Wave Mode--
+this is usefull for stuff like audio. there are a few ways
+to use this mode. synchronous, cyclical, and asynchronous.
+there are several frequencies of output that can work here
+19.6KHz - several MHz.
+
+--Cosine Wave Mode--
+you can output a cosine wave, specifying the amplitude,
+phase, and frequency.
+
+=== Analog Input ===
+there are two units capable of reading analog input.
+
+--Oneshot Mode--
