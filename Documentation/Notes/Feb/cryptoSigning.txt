@@ -1,0 +1,10 @@
+-----------------------------------------------------------
+Cryptographic Signing on ESP32
+tuesday - 11th
+-----------------------------------------------------------
+since the esp32 is a 32bit processor we need a special
+implementation of various algorithms for cyptographic signing.
+
+Solana uses Ed25519 to sign its messages with privatekey
+this is an implementation
+https://github.com/floodyberry/ed25519-donna/tree/master
