@@ -1,0 +1,33 @@
+-----------------------------------------------------------
+Authenticating Solute Nodes
+tuesday - 24th
+-----------------------------------------------------------
+
+Solute Nodes and their messages must be authenticated and
+have the option to be encrypted.
+
+-- Authenticating Messages --
+Messages should be authenticated by signature.
+
+-- Encrypting Messages --
+Messages can be encrypted via public key of receiver.
+
+--- Private Groups on the Network ---
+Consider a group of nodes on solvent that trust eachother.
+The group may want to send messages across the network to
+one another without the network seeing the messages.
+A group could use a group identifier, where everyone knows
+both public and private key.
+
+--- Solute Groups ---
+Groups form when a node invites another node to join its group.
+The invitation has the ID of the invitor, and invitee, as well
+as the group identifier. The message is signed by the invitor.
+Groups are trusted nodes, who share private key allowing
+the group to communicate with encryption.
+Getting a groups private key to the invitee, requires first the
+invitee to respond with a signed acceptance, next the invitor
+will encrypt the message using the invitees public encryption key
+and send it to the invitee, now messages can be sent to the entire
+group without needing to encrypt for each individual in the group,
+saving compute.
