@@ -1,0 +1,22 @@
+-----------------------------------------------------------
+Network Groups
+wednesday - 26th
+-----------------------------------------------------------
+
+-- What would a Group Be? --
+multiple nodes that trust eachother and want to communicate
+groups may differ if they want each node to keep track of
+who is in the group or not.
+
+-- Possible Private Group Communications --
+a group could simply share a single symmetric key, the downside
+being if a node becomes untrusted the group must change keys.
+[no persistent tracking of members list]
+
+a group could work by having members generate a new symmetric
+key with each send, and asymetric encrypt that key for each
+of the receivers so a member chooses who can decrypt
+[requires tracking of members list]
+
+a group could act together to find out the key, using something
+like Shamir's Secret Sharing Algorihtm
