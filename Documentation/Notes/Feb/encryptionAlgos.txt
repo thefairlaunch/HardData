@@ -1,0 +1,39 @@
+-----------------------------------------------------------
+Review of some Encryption and Signature Algorithms
+tuesday - 25th
+-----------------------------------------------------------
+--Reads--
+https://safecurves.cr.yp.to
+https://en.wikipedia.org/wiki/Diffie–Hellman_key_exchange
+
+
+
+there are lots of cryptography algorithms, many are considered
+compromised, also some of the utilities such as random number
+generators around cryptography are compromised
+
+-- Bad Ones --
+- RSA: NSA worked with this company and paid for a backdoor
+       to their random number generator
+- DES: this was worked on with NSA and faulty, outdated
+- NIST: this has up-my-sleeve numbers
+
+
+-- Ok --
+- AES: this seems to be a standard, used by Apple and such,
+       but how it is implemented matters: the random number
+       generator is important. Also improtantly it uses
+       large prime numbers to generate keys. Since there
+       are relatively few large primes, it is prone to
+       brute force attacks (doubt anyone would)
+- secp256k1: bitcoin uses this
+
+
+-- Good? --
+
+- EdDSA and Ed25519
+edwards curve digital signature algorithm, uses eliptic curves
+such as Curve25519 (255bit) and Curve448-Goldilocks are good examples
+of this and apparently are formed with no strange "up-my-sleeve"
+numbers.
+- many listed on SafeCurves.
