@@ -1,0 +1,46 @@
+------------------------------------------------------------
+NaCl Notes
+wednesday - 26th
+------------------------------------------------------------
+Daniel Bernstein, Tanja lange, Peter Schwabe
+Peter Schwabe a has some very useful papers
+https://cryptojedi.org/papers/
+https://cryptojedi.org/papers/mu25519-20150417.pdf
+https://nacl.cr.yp.to/internals.html
+https://nacl.cr.yp.to/install.html
+use Archive Utility to open this folder of source code:
+curl https://hyperelliptic.org/nacl/nacl-20110221.tar.bz2 --output NaCl
+
+
+--- Implementation Conventions ---
+
+-- Branches --
+do not use secret data to control branches, do not use memcmp
+function to compare secrets. use a constant time string
+comparison instead. Assume C comparisons compile to branches.
+
+-- Array Lookups --
+do not use secrect data as an array index.
+
+-- Memory Allocation --
+do not use the heap, do not use variable sized stack allocation
+i.e (int x[n])
+
+-- Thread Safety --
+do not use global variables
+
+-- Alignment --
+assume both input and output arrays can be misaligned and create
+checks and fallbacks for those cases.
+
+-- Defining Variables --
+define all variables at the start of a function.
+
+------------------------------------------------------------
+Source Code
+wednesday - 26th
+------------------------------------------------------------
+
+-- Important Utilities --
+measure-anything.c contains many important functions such as
+randombytes, printword, printnum, fail, alignedcalloc,
