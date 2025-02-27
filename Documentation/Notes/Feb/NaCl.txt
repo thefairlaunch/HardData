@@ -11,6 +11,9 @@ https://nacl.cr.yp.to/install.html
 use Archive Utility to open this folder of source code:
 curl https://hyperelliptic.org/nacl/nacl-20110221.tar.bz2 --output NaCl
 
+-- NaCl for ESP8266 (martin-ger) --
+https://github.com/martin-ger/esp_nacl
+
 
 --- Implementation Conventions ---
 
