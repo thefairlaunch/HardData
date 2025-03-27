@@ -1,0 +1,29 @@
+-----------------------------------------------------------
+Radix 2^51 Representation of Field
+-----------------------------------------------------------
+
+-- Resources --
+https://cryptojedi.org/papers/#neoncrypto
+
+1. https://www.chosenplaintext.ca/articles/radix-2-51-trick.html
+2. Efficient Software Implementation of Public-Key Cryptography
+   on Sensor Networks Using the MSP430X Microcontroller -
+   Conrado P. L. Gouveˆa · Leonardo B. Oliveira · Julio Lo ́pez
+3. High-speed high-security signatures -
+   Bernstein, Duif, Lange, Schwabe, Yang
+4. High-speed Curve25519 on 8-bit, 16-bit and 32-bit microcontrollers
+   Michael Düll · Björn Haase · Gesine Hinterwälder · Michael Hutter
+   Christof Paar · Ana Helena Sánchez · Peter Schwabe
+
+--- Context ---
+arithmetic on the edwards curve involves integers in a prime field
+2^{255} - 19. these are essentially 256 bit numbers, but our
+cpus only handle operations with 16, 32, 64 bit elements. this means
+we must define addition, subtraction, multiplication, squaring
+with 256 bit numbers, and must do it in an efficient way.
+
+256 bit numbers can be represented in 4-limb radix 64, i.e 4 words of 64 bits
+or it could be 8-limb 32 bit words, or 16-limb 16 bit words, ...
+however implementing these leads to slowness due to carries /
+overflows. therefore there is a standard in crytography to use a
+5-limb 51bit representation (ed25519 is elements are equiv mod 2^{255}-19)
